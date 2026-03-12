@@ -10,6 +10,7 @@
 #   - Confluence DC running at the URLs configured below
 #   - .envBackupSource file with CONFLUENCE_BASE and CONFLUENCE_TOKEN for the source instance
 #   - .envRecoveryTarget file with CONFLUENCE_BASE and CONFLUENCE_TOKEN for the target instance
+#   - make sure to update BACKUP_URL(line 21)
 #   - Docker image built (or will be built automatically)
 #
 # The backup reads from the source instance and the restore writes to the target instance.
