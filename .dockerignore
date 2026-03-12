@@ -1,0 +1,17 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.git/
+.claude/
+.env
+logs/
+confluence-export-*/
+htmlcov/
+.coverage
+.mypy_cache/
+*.egg-info/
+dist/
+build/
+.idea/
+.vscode/

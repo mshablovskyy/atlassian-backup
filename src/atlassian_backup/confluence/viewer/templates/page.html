@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% set active_page_id = page_id %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block content %}
+<article class="page-view">
+  <h1>{{ page.title }}</h1>
+
+  <div class="page-meta">
+    <span class="meta-item">
+      Created by <strong>{{ page.get('created_by', 'Unknown') }}</strong>
+      on {{ page.get('created_date', '')[:10] }}
+    </span>
+    <span class="meta-sep">|</span>
+    <span class="meta-item">
+      Updated by <strong>{{ page.get('last_updated_by', 'Unknown') }}</strong>
+      on {{ page.get('last_updated_date', '')[:10] }}
+    </span>
+    <span class="meta-sep">|</span>
+    <span class="meta-item">Version {{ page.get('version_number', '?') }}</span>
+    {% if page.get('labels') %}
+    <span class="meta-sep">|</span>
+    {% for label in page.labels %}
+    <span class="label-tag">{{ label }}</span>
+    {% endfor %}
+    {% endif %}
+  </div>
+
+  <div class="page-body">
+    {{ body_html | safe }}
+  </div>
+
+  {% if attachments %}
+  <div class="attachments-section">
+    <h2>Attachments ({{ attachments|length }})</h2>
+    <table class="attachments-table">
+      <thead>
+        <tr><th>Name</th><th>Type</th><th>Size</th><th>Download</th></tr>
+      </thead>
+      <tbody>
+        {% for att in attachments %}
+        <tr>
+          <td>{{ att.title }}</td>
+          <td>{{ att.mediaType }}</td>
+          <td>{{ att.fileSize | filesizeformat }}</td>
+          <td><a href="/attachment/{{ page_id }}/{{ sanitize_filename(att.title) }}">Download</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  {% if comments %}
+  <div class="comments-section">
+    <h2>Comments ({{ comments|length }})</h2>
+    {% for comment in comments %}
+    <div class="comment">
+      <div class="comment-meta">
+        <strong>{{ comment.created_by }}</strong>
+        <span class="comment-date">{{ comment.created_date[:10] }}</span>
+      </div>
+      <div class="comment-body">
+        {{ comment.body_rendered | safe }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</article>
+{% endblock %}

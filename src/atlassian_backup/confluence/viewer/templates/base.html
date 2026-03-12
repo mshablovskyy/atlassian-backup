@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ backup.backup_name }}{% endblock %} - Confluence Backup Viewer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="layout">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="/" class="sidebar-title">{{ backup.space_key or backup.backup_name }}</a>
+      </div>
+      <div class="sidebar-tree">
+        {% macro render_tree(nodes, active_id) %}
+        <ul>
+          {% for node in nodes %}
+          <li>
+            {% if node.children %}
+            <details{% if active_id and (node.id == active_id or is_ancestor(node.children, active_id)) %} open{% endif %}>
+              <summary>
+                <a href="/page/{{ node.id }}"{% if node.id == active_id %} class="active"{% endif %}>{{ node.title }}</a>
+              </summary>
+              {{ render_tree(node.children, active_id) }}
+            </details>
+            {% else %}
+            <a href="/page/{{ node.id }}"{% if node.id == active_id %} class="active"{% endif %}>{{ node.title }}</a>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+        {% endmacro %}
+        {{ render_tree(backup.page_tree, active_page_id|default('')) }}
+      </div>
+    </nav>
+    <main class="content">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>

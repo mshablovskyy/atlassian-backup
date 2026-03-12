@@ -1,0 +1,53 @@
+[tool.poetry]
+name = "atlassian-backup"
+version = "0.1.0"
+description = "Backup/recovery system for Atlassian Confluence"
+authors = ["Maksym Shablovskyy <mshablovskyy@gmail.com>"]
+license = "Apache-2.0"
+
+packages = [{ include = "atlassian_backup", from = "src" }]
+
+[tool.poetry.scripts]
+confluence-backup = "atlassian_backup.confluence.cli:main"
+confluence-backup-viewer = "atlassian_backup.confluence.viewer.cli:main"
+confluence-restore = "atlassian_backup.confluence.restore_cli:main"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+requests = "^2.32"
+python-dotenv = "^1.0"
+flask = "^3.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
+pytest-cov = "^6.0"
+responses = "^0.25"
+ruff = "^0.9"
+mypy = "^1.14"
+types-requests = "^2.32"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "SIM", "RUF"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+mypy_path = "src"
+packages = ["atlassian_backup"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: marks tests as integration tests (deselect with '-m \"not integration\"')",
+]

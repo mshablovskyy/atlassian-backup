@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="home-page">
+  <h1>Confluence Backup Viewer</h1>
+
+  <div class="info-card">
+    <h2>Backup Details</h2>
+    <table class="meta-table">
+      <tr><th>Name</th><td>{{ backup.backup_name }}</td></tr>
+      <tr><th>Type</th><td>{{ backup.backup_type }}</td></tr>
+      <tr><th>Space</th><td>{{ backup.space_key }}</td></tr>
+      <tr><th>Source URL</th><td><span class="source-url">{{ backup.source_url }}</span></td></tr>
+    </table>
+  </div>
+
+  <div class="info-card">
+    <h2>Statistics</h2>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-value">{{ backup.statistics.get('pages_backed_up', 0) }}</span>
+        <span class="stat-label">Pages</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">{{ backup.statistics.get('blog_posts_backed_up', 0) }}</span>
+        <span class="stat-label">Blog Posts</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">{{ backup.statistics.get('attachments_downloaded', 0) }}</span>
+        <span class="stat-label">Attachments</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">{{ backup.statistics.get('comments_backed_up', 0) }}</span>
+        <span class="stat-label">Comments</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">{{ backup.statistics.get('labels_backed_up', 0) }}</span>
+        <span class="stat-label">Labels</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">{{ backup.statistics.get('users_collected', 0) }}</span>
+        <span class="stat-label">Users</span>
+      </div>
+      <div class="stat-item{% if backup.statistics.get('total_errors', 0) > 0 %} stat-error{% endif %}">
+        <span class="stat-value">{{ backup.statistics.get('total_errors', 0) }}</span>
+        <span class="stat-label">Errors</span>
+      </div>
+    </div>
+  </div>
+
+  {% if backup.errors %}
+  <div class="info-card">
+    <h2>Errors</h2>
+    <table class="errors-table">
+      <thead>
+        <tr><th>Type</th><th>ID</th><th>Error</th></tr>
+      </thead>
+      <tbody>
+        {% for error in backup.errors %}
+        <tr>
+          <td>{{ error.type }}</td>
+          <td>{{ error.id }}</td>
+          <td>{{ error.error }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
